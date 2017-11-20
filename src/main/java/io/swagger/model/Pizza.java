@@ -8,6 +8,7 @@ import javax.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -66,6 +67,7 @@ public class Pizza  {
 
   public List<Long> toppings = new ArrayList<Long>();
 
+  @JsonIgnore
   public List<Long> getToppings() {
 	    return toppings;
 	  }
@@ -128,6 +130,37 @@ public class Pizza  {
     this.price = price;
     return this;
   }
+  
+  
+  public BigDecimal calTotalPrice(BigDecimal xoxo) {
+
+	   BigDecimal totalPrice = new BigDecimal(0);
+	   
+	   totalPrice = getPrice().add(xoxo);
+	    
+	   setPrice(totalPrice);
+	   return totalPrice;	
+	  	 
+	  	 
+  }
+  
+  
+  public BigDecimal calPrice(String size ) {
+
+		 if(size.equals("Standard")) {
+			 price = new BigDecimal("5.00");
+					 
+			 }
+		 else if(size.equals("Large")) {
+			 price = new BigDecimal("8.50");
+			 }
+		 else {
+			 price = new BigDecimal("0");;
+		 }
+		 
+		 return price;
+}
+
 
   
  
@@ -141,27 +174,6 @@ public class Pizza  {
   }
 
   public void setPrice(BigDecimal price) {
-
-		 if(getSize().toString() == "Standard") {
-			 price = new BigDecimal("5.00");
-			 for(Long ko: getToppings()){
-					Topping tips = new Topping();
-					if(ko == tips.getId()) {
-						price.add(tips.getPrice());
-					}
-					 
-			 }
-		 }else if(getSize().toString() == "Large") {
-			 price = new BigDecimal("8.50");
-			 for(Long ko: getToppings()){
-					Topping tips = new Topping();
-					if(ko == tips.getId()) {
-						price.add(tips.getPrice());
-					}	 
-			 }
-		 }else {
-			 price = new BigDecimal("0");;
-		 }
 		 
 		 this.price = price;
   }

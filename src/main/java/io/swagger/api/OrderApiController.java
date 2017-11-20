@@ -28,18 +28,17 @@ public class OrderApiController implements OrderApi {
 	List<Order> listOrder = new ArrayList<Order>();
 	List<OrderItem> orderItemList = new ArrayList<OrderItem>();
 	AtomicInteger orderID = new AtomicInteger(1);
-	 
+	long id = orderID.getAndIncrement();
+ 
 	
     public ResponseEntity<Void> createOrder(@ApiParam(value = "order of pizzas" ,required=true ) @RequestBody Order body) {
  
     if(body.getRecipient() != null) {	
     	Order order = new Order();
-    	long id = orderID.getAndIncrement();
-
     	order.setId(id);
     	order.setOrderItems(body.getOrderItems());
     	order.setRecipient(body.getRecipient());
-    	order.setTotalPrice(order.getTotalPrice());
+    	//order.setTotalPrice(order.getTotalPrice());
     	listOrder.add(order);
     	return new ResponseEntity<Void>(HttpStatus.CREATED);
     }else {
@@ -61,11 +60,14 @@ public class OrderApiController implements OrderApi {
     
 
     public ResponseEntity<Order> getOrderById(@ApiParam(value = "ID of order to be returned",required=true ) @PathVariable("orderId") Long orderId) {
+   
     	for(Order o:listOrder) {
         	if(o.getId() == orderId) {
+        		System.out.println(o);
         		return new ResponseEntity<Order>(o,HttpStatus.NO_CONTENT);
         	}
     	}
+    	
 		return new ResponseEntity<Order>(HttpStatus.NOT_FOUND);
 		
     	}

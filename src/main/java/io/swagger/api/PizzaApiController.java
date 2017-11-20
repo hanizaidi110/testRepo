@@ -32,16 +32,15 @@ public class PizzaApiController implements PizzaApi {
  	List<Topping> tops = new ArrayList<Topping>();
  	AtomicInteger pizzaID = new AtomicInteger(1);
  	AtomicInteger toppingID = new AtomicInteger(1);
- 	
+	
     public ResponseEntity<Void> addPizza(@ApiParam(value = "Pizza that should be added to the menu" ,required=true ) @RequestBody Pizza body) {
      	Pizza  p = new 	Pizza();
 
      	if(body.getName() != null || body.getSize() !=null){
-     		long id = pizzaID.getAndIncrement();
-     		p.setId(id);
+     		p.setId((long)pizzaID.getAndIncrement());
      		p.setName(body.getName());
         	p.setSize(body.getSize());
-        	p.setPrice(p.getPrice());
+        	p.setPrice(p.calPrice(body.getSize().toString()));
         	pis.add(p);
         	
         	return new ResponseEntity<Void>(HttpStatus.CREATED);	
@@ -73,7 +72,6 @@ public class PizzaApiController implements PizzaApi {
     	}else {
     		return new ResponseEntity<List<Integer>>(ir,HttpStatus.OK);
     	}
-    	
     }
 
     public ResponseEntity<Void> deletePizza(@ApiParam(value = "Id of pizza to delete.",required=true ) @PathVariable("pizzaId") Long pizzaId) {
@@ -95,12 +93,11 @@ public class PizzaApiController implements PizzaApi {
     		if(s.getId() == pizzaId) {
 
     	    	Pizza  p = new 	Pizza();
-
-    	    	p.setId((long)1);
-    	    	p.setName(body.getName());
-    	    	p.setSize(body.getSize());
-    	    	p.setPrice(body.getPrice());
-    	    	pis.add(p);
+    	    	s.id(pizzaId);
+    	    	s.setName(body.getName());
+    	    	s.setSize(body.getSize());
+    	    	//s.setPrice(p.getPrice());
+    	    	pis.add(s);
     	    	
     	    return new ResponseEntity<Void>(HttpStatus.CREATED);
 
@@ -117,15 +114,17 @@ public class PizzaApiController implements PizzaApi {
          	
     	for(Pizza p:pis) {
         	if(p.getId() == pizzaId) {
-             	
-        		long tid = toppingID.getAndIncrement();
+             	long id = toppingID.getAndIncrement();
         		Topping  t = new Topping(); 	
-            	p.getToppings().add(tid);
-        		t.setId(tid);
+            	t.setId(id);
+            	p.getToppings().add(t.getId());
             	t.setName(body.getName());
             	t.setPrice(body.getPrice());
             	
             	tops.add(t);
+            	
+            	p.calTotalPrice(body.getPrice());
+            
             	return new ResponseEntity<Void>(HttpStatus.CREATED);
         		}
         	
@@ -139,18 +138,16 @@ public class PizzaApiController implements PizzaApi {
         @ApiParam(value = "ID of the topping.",required=true ) @PathVariable("toppingId") Long toppingId) {
        
     	if(pizzaId != null && toppingId!= null) {
-    	for(Pizza p: pis) {
-    		if(pizzaId == p.getId()) {
-    			for(Long z: p.getToppings()) {
-    				if(z == toppingId) {
-    					p.getToppings().remove(toppingId);
-    					return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-    			  }
+    		for(Pizza p: pis) {
+    			if(p.getId() == pizzaId) {
+    				for(Topping t:tops) {
+    					if(t.getId() == toppingId) {
+    						tops.remove(t);
+    					}
+    				}
     			}
     		}
     		
-    	  }
-    	return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
     	}
     	return new ResponseEntity<Void>(HttpStatus.NOT_FOUND); 
     }

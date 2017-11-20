@@ -109,7 +109,6 @@ public interface PizzaApi {
         method = RequestMethod.GET)
     ResponseEntity<List<Integer>> listToppings(@ApiParam(value = "ID of pizza",required=true ) @PathVariable("pizzaId") Long pizzaId);
 
-
     @ApiOperation(value = "Update an existing pizza", notes = "", response = Void.class, tags={ "pizza", })
     @ApiResponses(value = { 
         @ApiResponse(code = 204, message = "Update okay", response = Void.class),

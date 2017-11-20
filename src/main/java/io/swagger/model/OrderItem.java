@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -16,7 +17,7 @@ public class OrderItem   {
   private Long pizzaId = null;
 
   @JsonProperty("quantity")
-  private Long quantity = null;
+  private BigDecimal quantity = null;
 
   public OrderItem pizzaId(Long pizzaId) {
     this.pizzaId = pizzaId;
@@ -36,7 +37,7 @@ public class OrderItem   {
     this.pizzaId = pizzaId;
   }
 
-  public OrderItem quantity(Long quantity) {
+  public OrderItem quantity(BigDecimal quantity) {
     this.quantity = quantity;
     return this;
   }
@@ -46,11 +47,11 @@ public class OrderItem   {
    * @return quantity
   **/
   @ApiModelProperty(value = "")
-  public Long getQuantity() {
+  public BigDecimal getQuantity() {
     return quantity;
   }
 
-  public void setQuantity(Long quantity) {
+  public void setQuantity(BigDecimal quantity) {
     this.quantity = quantity;
   }
 

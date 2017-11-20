@@ -85,23 +85,24 @@ public class Order   {
   public BigDecimal getTotalPrice() {
     return totalPrice;
   }
-
-  public void setTotalPrice(BigDecimal totalPrice) {
-	 
-	  List<Long> mast = new ArrayList<Long>();
-	  for(OrderItem ko: getOrderItems()) {
-		  mast.add(ko.getPizzaId());
-	  }
-	  Pizza ms= new Pizza();
-	  for(int i=0; i< mast.size(); i++) {
-		  if(ms.getId() == mast.get(i)){
-			  totalPrice.add(ms.getPrice());
-		  }
-	  }
+/*
+  public BigDecimal setTotalPrice(BigDecimal bigDecimal) { 
+	  BigDecimal totalPrice = new BigDecimal(0);
+	  PizzaApiController as = new PizzaApiController();
+	  BigDecimal product;
+	  BigDecimal quantity;
+	  BigDecimal total;
 	  
-	  this.totalPrice = totalPrice;
+	  for(OrderItem oi: bigDecimal) {
+		  product =  as.getPizzaById(oi.getPizzaId()).getBody().getPrice();
+		  quantity = oi.getQuantity();
+		  total = product.multiply(quantity);
+		  totalPrice.add(total);		  
+	  }
+	 
+	 return totalPrice;
   }
-
+*/
   public Order recipient(String recipient) {
     this.recipient = recipient;
     return this;
